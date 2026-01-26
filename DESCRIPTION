@@ -1,0 +1,31 @@
+Package: muiMaterial
+Type: Package
+Title: 'Material UI' for 'shiny' Apps and 'Quarto'
+Version: 0.1.2
+Authors@R: 
+  c(person(given = "Felix",
+           family = "Luginbuhl",
+           role = c("aut", "cre", "cph"),
+           email = "felix.luginbuhl@protonmail.ch", 
+           comment = c(ORCID = "0009-0008-6625-2899")))
+Maintainer: Felix Luginbuhl <felix.luginbuhl@protonmail.ch>
+Description: 
+  A set of user interface components for building 'shiny' applications and 
+  'quarto' documents, including inputs, layouts, navigation, surfaces, and various
+  utilities. All components 'Material UI' from the company 'MUI' <https://mui.com/>
+  are available and all inputs have usage examples in R.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Depends: R (>= 3.4)
+Imports: htmltools, checkmate, shiny, shiny.react (>= 0.4.0)
+Suggests: reactRouter, shiny.router, testthat (>= 3.0.0)
+RoxygenNote: 7.3.3
+URL: https://felixluginbuhl.com/muiMaterial/
+BugReports: https://github.com/lgnbhl/muiMaterial/issues
+Config/testthat/edition: 3
+NeedsCompilation: no
+Packaged: 2026-01-21 14:17:32 UTC; felix
+Author: Felix Luginbuhl [aut, cre, cph] (ORCID:
+    <https://orcid.org/0009-0008-6625-2899>)
+Repository: CRAN
+Date/Publication: 2026-01-26 16:20:21 UTC
