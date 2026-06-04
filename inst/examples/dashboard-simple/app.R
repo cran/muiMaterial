@@ -1,21 +1,12 @@
 library(muiMaterial)
 library(reactRouter)
-library(htmltools)
 library(shiny)
 
-# Define drawer width
-drawer_width <- 240
-
-# Menu items configuration (icon names for shiny::icon())
-menu_items <- list(
-  list(text = "Dashboard", icon = "dashboard", path = "/"),
-  list(text = "Analytics", icon = "bar-chart", path = "/analytics"),
-  list(text = "Users", icon = "person", path = "/users"),
-  list(text = "Settings", icon = "gear", path = "/settings")
-)
+# https://mui.com/material-ui/react-drawer/#clipped-under-the-app-bar
+drawer_width <- 200
 
 # Page components
-dashboard_page <- function() {
+home_page <- function() {
   Box(
     Typography("Dashboard", variant = "h4", gutterBottom = TRUE),
     Typography(
@@ -37,102 +28,90 @@ analytics_page <- function() {
   )
 }
 
-users_page <- function() {
-  Box(
-    Typography("Users", variant = "h4", gutterBottom = TRUE),
-    Typography(
-      "Information your users.",
-      variant = "body1",
-      color = "text.secondary"
-    )
+# Menu items configuration (icon names for shiny::icon())
+menu_items <- list(
+  list(text = "Home", icon = "house", path = "/", element = home_page()),
+  list(
+    text = "Analytics",
+    icon = "chart-bar",
+    path = "/analytics",
+    element = analytics_page()
   )
-}
+)
 
-settings_page <- function() {
-  Box(
-    Typography("Settings", variant = "h4", gutterBottom = TRUE),
-    Typography(
-      "Configure your application settings.",
-      variant = "body1",
-      color = "text.secondary"
-    )
-  )
-}
-
-# Drawer content
-create_drawer_content <- function() {
-  Box(
-    Toolbar(
-      Typography("muiMaterial App", variant = "h6", noWrap = TRUE, component = "div")
-    ),
-    List(
-      lapply(menu_items, function(item) {
-        ListItem(
-          disablePadding = TRUE,
-          sx = list(display = 'block'),
-          NavLink(
-            to = item$path,
-            style = list(textDecoration = "none", color = "black"),
-            ListItemButton(
-              sx = list(
-                "&.active" = list(
-                  backgroundColor = "primary.light",
-                  color = "primary.contrastText",
-                  "& .MuiListItemIcon-root" = list(
-                    color = "primary.contrastText"
-                  )
-                )
-              ),
-              ListItemIcon(shiny::icon(item$icon)),
-              ListItemText(primary = item$text)
-            )
+drawer_nav <- Box(
+  sx = list(overflow = "auto"),
+  List(
+    lapply(menu_items, function(item) {
+      ListItem(
+        key = item$path,
+        disablePadding = TRUE,
+        NavLink(
+          to = item$path,
+          # end = TRUE: only mark active on an exact URL match, so "/"
+          # doesn't stay active on every nested route
+          end = TRUE,
+          style = list(
+            textDecoration = "none",
+            color = "inherit",
+            width = "100%"
+          ),
+          ListItemButton(
+            sx = list(
+              "&.active, .active &" = list(
+                bgcolor = "action.selected"
+              )
+            ),
+            ListItemIcon(shiny::icon(item$icon)),
+            ListItemText(primary = item$text)
           )
         )
-      })
-    )
+      )
+    })
   )
-}
+)
 
-# Main app component
-ui <- function() {
-  muiMaterialPage(
-    CssBaseline(
-      HashRouter(
-        Box(
+ui <- muiMaterialPage(
+  CssBaseline(),
+  reactRouter::RouterProvider(
+    router = createHashRouter(
+      Route(
+        path = "/",
+        element = Box(
           sx = list(display = "flex"),
-          
-          # AppBar
           AppBar(
             position = "fixed",
             sx = list(
-              width = list(sm = sprintf("calc(100%% - %dpx)", drawer_width)),
-              ml = list(sm = sprintf("%dpx", drawer_width))
+              zIndex = JS("(theme) => theme.zIndex.drawer + 1")
             ),
             Toolbar(
-              Button.shinyInput(
-                inputId = "showDrawer",
+              # Hamburger button — visible on mobile only
+              IconButton(
+                id = "nav-trigger",
                 color = "inherit",
                 edge = "start",
                 sx = list(mr = 2, display = list(sm = "none")),
                 shiny::icon("bars")
               ),
-              Typography("Dashboard", variant = "h6", noWrap = TRUE, component = "div")
+              Typography(
+                "Dashboard",
+                variant = "h6",
+                noWrap = TRUE,
+                component = "div"
+              )
             )
           ),
-          
-          # Navigation Drawer
           Box(
             component = "nav",
             sx = list(
               width = list(sm = drawer_width),
               flexShrink = list(sm = 0)
             ),
-            # Temporary drawer for mobile
-            Drawer.shinyInput(
-              inputId = "drawer",
-              open = FALSE,
-              onClose = triggerEvent("hideDrawer"),
-              variant = "temporary",
+            # Mobile drawer — triggered by the hamburger button, no server needed
+            Drawer.triggerId(
+              triggerId = "nav-trigger",
+              anchor = "left",
+              width = drawer_width,
               sx = list(
                 display = list(xs = "block", sm = "none"),
                 "& .MuiDrawer-paper" = list(
@@ -140,55 +119,47 @@ ui <- function() {
                   width = drawer_width
                 )
               ),
-              create_drawer_content()
+              Toolbar(),
+              drawer_nav
             ),
-            # Permanent drawer for desktop
+            # Permanent drawer — desktop only
             Drawer(
               variant = "permanent",
-              open = TRUE,
               sx = list(
                 display = list(xs = "none", sm = "block"),
                 "& .MuiDrawer-paper" = list(
-                  boxSizing = "border-box",
-                  width = drawer_width
+                  width = drawer_width,
+                  boxSizing = "border-box"
                 )
               ),
-              create_drawer_content()
+              Toolbar(),
+              drawer_nav
             )
           ),
-          
-          # Main content area
           Box(
             component = "main",
-            sx = list(
-              flexGrow = 1,
-              p = 3,
-              width = list(sm = sprintf("calc(100%% - %dpx)", drawer_width))
-            ),
+            sx = list(flexGrow = 1, p = 3),
             Toolbar(),
-            Container(
-              maxWidth = "lg",
-              Routes(
-                Route(path = "/", element = dashboard_page()),
-                Route(path = "/analytics", element = analytics_page()),
-                Route(path = "/users", element = users_page()),
-                Route(path = "/settings", element = settings_page())
-              )
-            )
+            Outlet()
           )
-        )
+        ),
+        lapply(menu_items, function(item) {
+          if (item$path == "/") {
+            Route(index = TRUE, element = item$element)
+          } else {
+            Route(path = sub("^/", "", item$path), element = item$element)
+          }
+        })
       )
     )
   )
-}
+)
 
-server <- function(input, output, session) {
-  toggleDrawer <- reactiveVal(FALSE)
-  observeEvent(input$showDrawer, toggleDrawer(TRUE))
-  observeEvent(input$hideDrawer, toggleDrawer(FALSE))
-  observeEvent(c(input$showDrawer, input$hideDrawer), {
-    updateDrawer.shinyInput(inputId = "drawer", open = toggleDrawer())
-  })
-}
+server <- function(input, output, session) {}
 
 shinyApp(ui, server)
+
+# Save static dashboard as an HTML file
+# htmltools::save_html(ui, "dashboard-static.html")
+# See the dashboard
+# htmltools::browsable(ui)

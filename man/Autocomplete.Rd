@@ -8,7 +8,7 @@
 \usage{
 Autocomplete(...)
 
-Autocomplete.shinyInput(inputId, ..., value = defaultValue)
+Autocomplete.shinyInput(inputId, ..., value = NULL)
 
 updateAutocomplete.shinyInput(
   session = shiny::getDefaultReactiveDomain(),
@@ -30,6 +30,18 @@ Object with \code{shiny.tag} class suitable for use in the UI of a Shiny app.
 }
 \description{
 \url{https://mui.com/material-ui/api/autocomplete/}
+
+MUI's \code{Autocomplete} requires a \code{renderInput} function prop, which
+R cannot express directly. The R wrapper resolves the input in this order:
+\enumerate{
+\item \code{renderInput} — pass an explicit \code{JS()} callback for full control.
+\item A child element (e.g. \code{TextField(...)}, \code{OutlinedInput(...)})
+— it is cloned and receives the \code{params} from MUI automatically.
+This is the recommended path: it stays close to the MUI API and survives
+upstream changes without touching R user code.
+\item \code{inputProps} — a named list of props forwarded to a default
+\code{TextField}. Kept for backward compatibility with older examples.
+}
 }
 \details{
 \itemize{
@@ -98,4 +110,26 @@ Object with \code{shiny.tag} class suitable for use in the UI of a Shiny app.
 \item sx \verb{Array func| object| bool | func| object} \cr Default is - The system prop that allows defining system overrides as well as additional CSS styles.See the \code{sx} page for more details.
 \item value \code{any} \cr Default is - The value of the autocomplete.The value must have reference equality with the option in order to be selected. You can customize the equality behavior with the isOptionEqualToValue prop.
 }
+}
+\examples{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+library(shiny)
+library(muiMaterial)
+
+ui <- muiMaterialPage(
+  CssBaseline(),
+  Autocomplete.shinyInput(
+    inputId = "auto",
+    options = c("Apple", "Banana", "Cherry"),
+    TextField(label = "Fruit")
+  ),
+  verbatimTextOutput("out")
+)
+
+server <- function(input, output, session) {
+  output$out <- renderPrint(input$auto)
+}
+
+shinyApp(ui, server)
+\dontshow{\}) # examplesIf}
 }

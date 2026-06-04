@@ -9,11 +9,27 @@ Drawer.triggerId(triggerId, ...)
 \arguments{
 \item{triggerId}{HTML id of an existing DOM element that acts as the trigger (button, link, etc.) to open the Drawer.}
 
-\item{...}{args to pass to element}
+\item{...}{Named arguments forwarded as React props, plus children to render inside the component.
+Pass \code{closeOnLinkClick = FALSE} to keep the Drawer open when any link inside it is
+clicked. The default (\code{TRUE}) closes the Drawer on any \code{<a>} click, including
+external links with \code{target = "_blank"}.}
 }
 \value{
 Object with `shiny.tag` class suitable for use in the UI of a Shiny app.
 }
 \description{
-Custom Drawer for mobiles using Drawer component. See 'js/src/Drawer.triggerId.jsx'.
+Custom Drawer bound to a DOM element by id. See 'js/src/MuiDrawerTriggerId.jsx'.
+}
+\examples{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+library(shiny)
+library(muiMaterial)
+
+ui <- muiMaterialPage(
+  Button(id = "openDrawer", "Open drawer"),
+  Drawer.triggerId("openDrawer", anchor = "left", "Drawer content here")
+)
+
+shinyApp(ui, function(input, output, session) {})
+\dontshow{\}) # examplesIf}
 }

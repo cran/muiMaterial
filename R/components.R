@@ -1,19 +1,7 @@
-# Script generated automatically from 'inst/helpers'
-
-component <- function(name, module = '@mui/material') {
-  function(...) {
-    tag <- shiny.react::reactElement(
-      module = module,
-      name = name,
-      props = shiny.react::asProps(...),
-      deps = muiMaterialDependency()
-    )
-    class(tag) <- c("muiMaterial", class(tag))
-    tag
-  }
-}
+# The `component()` factory used below lives in R/aaa-utils.R.
 
 #' @rdname Accordion
+#' @include aaa-utils.R
 #' @export
 Accordion <- component('Accordion')
 
@@ -43,7 +31,7 @@ AppBar <- component('AppBar')
 
 #' @rdname Autocomplete
 #' @export
-Autocomplete <- component('Autocomplete')
+Autocomplete <- component('AutocompleteStatic', module = '@/muiMaterial')
 
 #' @rdname Avatar
 #' @export
@@ -209,10 +197,6 @@ GlobalStyles <- component('GlobalStyles')
 #' @export
 Grid <- component('Grid')
 
-#' @rdname GridLegacy
-#' @export
-GridLegacy <- component('GridLegacy')
-
 #' @rdname Grow
 #' @export
 Grow <- component('Grow')
@@ -295,7 +279,7 @@ ListSubheader <- component('ListSubheader')
 
 #' @rdname Masonry
 #' @export
-Masonry <- component('Masonry')
+Masonry <- component('Masonry', module = '@mui/lab')
 
 #' @rdname Menu
 #' @export
@@ -340,18 +324,6 @@ PaginationItem <- component('PaginationItem')
 #' @rdname Paper
 #' @export
 Paper <- component('Paper')
-
-#' @rdname PigmentContainer
-#' @export
-PigmentContainer <- component('PigmentContainer')
-
-#' @rdname PigmentGrid
-#' @export
-PigmentGrid <- component('PigmentGrid')
-
-#' @rdname PigmentStack
-#' @export
-PigmentStack <- component('PigmentStack')
 
 #' @rdname Popover
 #' @export
@@ -466,8 +438,11 @@ Switch <- component('Switch')
 Tab <- component('Tab')
 
 #' @rdname TabContext
+#' @note \code{TabContext} is part of \href{https://mui.com/material-ui/about-the-lab/}{\code{@mui/lab}},
+#'   which is published on the MUI beta channel. Lab APIs may change in future minor
+#'   releases.
 #' @export
-TabContext <- component('TabContext')
+TabContext <- component('TabContext', module = '@mui/lab')
 
 #' @rdname Table
 #' @export
@@ -510,16 +485,23 @@ TableSortLabel <- component('TableSortLabel')
 Tabs <- component('Tabs')
 
 #' @rdname TabList
+#' @note \code{TabList} is part of \href{https://mui.com/material-ui/about-the-lab/}{\code{@mui/lab}},
+#'   which is published on the MUI beta channel. Lab APIs may change in future minor
+#'   releases.
 #' @export
 TabList <- component('TabList', module = '@mui/lab')
 
 #' @rdname TabPanel
+#' @note \code{TabPanel} is part of \href{https://mui.com/material-ui/about-the-lab/}{\code{@mui/lab}},
+#'   which is published on the MUI beta channel. Lab APIs may change in future minor
+#'   releases.
 #' @export
 TabPanel <- component('TabPanel', module = '@mui/lab')
 
-#' @rdname TabContext
+#' @rdname TabPanel
+#' @description `TabPanel.static()` is an alias for `TabPanel()`, kept for backward compatibility.
 #' @export
-TabContext <- component('TabContext', module = '@mui/lab')
+TabPanel.static <- component('TabPanel', module = '@mui/lab')
 
 #' @rdname TabScrollButton
 #' @export
@@ -534,6 +516,10 @@ TextareaAutosize <- component('TextareaAutosize')
 TextField <- component('TextField')
 
 #' @rdname Timeline
+#' @note \code{Timeline} and its sub-components (\code{TimelineItem}, \code{TimelineDot},
+#'   etc.) are part of \href{https://mui.com/material-ui/about-the-lab/}{\code{@mui/lab}},
+#'   which is published on the MUI beta channel. Lab APIs may change in future minor
+#'   releases.
 #' @export
 Timeline <- component('Timeline', module = '@mui/lab')
 

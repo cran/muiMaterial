@@ -1,29 +1,32 @@
-library(muiMaterial)
 library(shiny)
+library(muiMaterial)
 
-ui_Tabs <- TabContext.shinyInput(
-  inputId = "TabContextExample", # with observer in server
-  value = "value1",
+# Client-side tabs: no server reactivity required.
+# TabContext.static / TabList.static wrap @mui/lab's TabContext / TabList
+# and add internal React state so the selected tab persists across clicks.
+# TabPanel comes straight from @mui/lab — no wrapper needed.
+ui_Tabs <- muiMaterialPage(
+  CssBaseline(),
   Box(
-    sx = list(borderBottom = 1, borderColor = 'divider'),
-    TabList.shinyInput(
-      inputId = "tabListExample",
-      value = "value1",
-      Tab(label="Item One", value = "value1"),
-      Tab(label="Item Two", value = "value2"),
-      Tab(label="Item Three", value = "value3")
+    sx = list(p = 2, width = "100%", typography = "body1"),
+    TabContext.static(
+      defaultValue = "one",
+      Box(
+        sx = list(borderBottom = 1, borderColor = "divider"),
+        TabList.static(
+          Tab(label = "Item One", value = "one"),
+          Tab(label = "Item Two", value = "two"),
+          Tab(label = "Item Three", value = "three")
+        )
+      ),
+      TabPanel(value = "one", "Content 1"),
+      TabPanel(value = "two", "Content 2"),
+      TabPanel(value = "three", "Content 3")
     )
-  ),
-  TabPanel.shinyInput(inputId = "tab1", value = "value1", "Content 1"),
-  TabPanel.shinyInput(inputId = "tab2", value = "value2", "Content 2"),
-  TabPanel.shinyInput(inputId = "tab3", value = "value3", "Content 3")
+  )
 )
 
-server_Tabs <- function(input, output, session) {
-  observe({
-    updateTabContext.shinyInput(inputId = "TabContextExample", value = input$tabListExample)
-  })
-}
+server_Tabs <- function(input, output, session) {}
 
 if (interactive()) {
   shinyApp(ui = ui_Tabs, server = server_Tabs)

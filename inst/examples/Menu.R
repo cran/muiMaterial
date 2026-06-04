@@ -8,7 +8,7 @@ OptionsMenu <- Box(
     color = "error",
     variant = "dot",
     invisible = FALSE,
-    sx = list("[`& .${badgeClasses.badge}`]" = list(right = 2, top = 2)),
+    sx = list("& .MuiBadge-badge" = list(right = 2, top = 2)),
     IconButton(
       id = "showMenu",
       size = "small",
@@ -20,13 +20,13 @@ OptionsMenu <- Box(
   Menu.triggerId(
     triggerId = "showMenu",
     sx = list(
-      "[`& .${listClasses.root}`]" = list(
+      "& .MuiList-root" = list(
         padding = '4px'
       ),
-      "[`& .${paperClasses.root}`]" = list(
+      "& .MuiPaper-root" = list(
         padding = 0
       ),
-      "[`& .${dividerClasses.root}`]" = list(
+      "& .MuiDivider-root" = list(
         margin = '4px -4px'
       )
     ),
@@ -38,7 +38,7 @@ OptionsMenu <- Box(
     Divider(),
     MenuItem(
       sx = list(
-        "[`& .${listItemIconClasses.root}`]" = list(
+        "& .MuiListItemIcon-root" = list(
           ml = 'auto',
           minWidth = 0
         )
@@ -52,9 +52,8 @@ OptionsMenu <- Box(
 )
 
 ui_Menu <- muiMaterialPage(
-  CssBaseline(
-    OptionsMenu
-  )
+  CssBaseline(),
+  OptionsMenu
 )
 
 server_Menu <- function(input, output, session) {}

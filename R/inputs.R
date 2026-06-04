@@ -3,19 +3,26 @@
 button <- function(name, module = "@/muiMaterial") {
   function(inputId, ...) {
     checkmate::assert_string(inputId)
-    tag <- shiny.react::reactElement(
-      module = module,
-      name = name,
-      props = shiny.react::asProps(inputId = inputId, ...),
-      deps = muiMaterialDependency()
-    )
-    class(tag) <- c("muiMaterial", class(tag))
-    tag
+    muiElement(name, module, shiny.react::asProps(inputId = inputId, ...))
   }
 }
 
 #' @rdname Button
 #' @inherit shinyInput params return
+#' @examplesIf interactive()
+#' library(shiny)
+#' library(muiMaterial)
+#'
+#' ui <- muiMaterialPage(
+#'   Button.shinyInput("btn", "Click me", variant = "contained"),
+#'   verbatimTextOutput("count")
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   output$count <- renderPrint(input$btn)
+#' }
+#'
+#' shinyApp(ui, server)
 #' @export
 Button.shinyInput <- button("Button")
 
@@ -24,8 +31,31 @@ Button.shinyInput <- button("Button")
 #' @export
 updateButton.shinyInput <- shiny.react::updateReactInput
 
+#' @rdname Dialog
+#' @inherit shinyInput params return
+#' @note This is an overlay surface wired as a click-reporter: \code{input[[inputId]]}
+#'   holds a click count (incremented on every click inside the surface), and the
+#'   wrapper does \strong{not} manage the \code{open} state. Render it with
+#'   \code{open = TRUE/FALSE} and toggle visibility from the server with
+#'   \code{updateDialog.shinyInput(session, inputId, open = TRUE)}. For the common
+#'   "open on click of a button" pattern, \code{\link{Dialog.triggerId}} is simpler
+#'   (open/close handled entirely client-side, no server logic).
+#' @export
+Dialog.shinyInput <- button("Dialog")
+
+#' @rdname Dialog
+#' @inherit shinyInput params return
+#' @export
+updateDialog.shinyInput <- shiny.react::updateReactInput
+
 #' @rdname Drawer
 #' @inherit shinyInput params return
+#' @note This is an overlay surface wired as a click-reporter: \code{input[[inputId]]}
+#'   holds a click count, and the wrapper does \strong{not} manage the \code{open}
+#'   state. Render it with \code{open = TRUE/FALSE} and toggle visibility from the
+#'   server with \code{updateDrawer.shinyInput(session, inputId, open = TRUE)}. For
+#'   the common "open on click of a button" pattern, \code{\link{Drawer.triggerId}}
+#'   is simpler (open/close handled entirely client-side, no server logic).
 #' @export
 Drawer.shinyInput <- button("Drawer")
 
@@ -54,8 +84,25 @@ Fab.shinyInput <- button("Fab")
 #' @export
 updateFab.shinyInput <- shiny.react::updateReactInput
 
+#' @rdname LoadingButton
+#' @inherit shinyInput params return
+#' @export
+LoadingButton.shinyInput <- button("LoadingButton")
+
+#' @rdname LoadingButton
+#' @inherit shinyInput params return
+#' @export
+updateLoadingButton.shinyInput <- shiny.react::updateReactInput
+
 #' @rdname Menu
 #' @inherit shinyInput params return
+#' @note This is an overlay surface wired as a click-reporter: \code{input[[inputId]]}
+#'   holds a click count (it does not tell you \emph{which} \code{MenuItem} was
+#'   clicked), and the wrapper does \strong{not} manage the \code{open} state.
+#'   Render it with \code{open = TRUE/FALSE} and toggle visibility from the server
+#'   with \code{updateMenu.shinyInput(session, inputId, open = TRUE)}. For the common
+#'   "open on click of a button" pattern, \code{\link{Menu.triggerId}} is simpler
+#'   (open/close handled entirely client-side, no server logic).
 #' @export
 Menu.shinyInput <- button("Menu")
 
@@ -63,6 +110,48 @@ Menu.shinyInput <- button("Menu")
 #' @inherit shinyInput params return
 #' @export
 updateMenu.shinyInput <- shiny.react::updateReactInput
+
+#' @rdname MenuItem
+#' @inherit shinyInput params return
+#' @export
+MenuItem.shinyInput <- button("MenuItem")
+
+#' @rdname MenuItem
+#' @inherit shinyInput params return
+#' @export
+updateMenuItem.shinyInput <- shiny.react::updateReactInput
+
+#' @rdname Modal
+#' @inherit shinyInput params return
+#' @note This is an overlay surface wired as a click-reporter: \code{input[[inputId]]}
+#'   holds a click count, and the wrapper does \strong{not} manage the \code{open}
+#'   state. Render it with \code{open = TRUE/FALSE} and toggle visibility from the
+#'   server with \code{updateModal.shinyInput(session, inputId, open = TRUE)}. For
+#'   the common "open on click of a button" pattern, \code{\link{Modal.triggerId}}
+#'   is simpler (open/close handled entirely client-side, no server logic).
+#' @export
+Modal.shinyInput <- button("Modal")
+
+#' @rdname Modal
+#' @inherit shinyInput params return
+#' @export
+updateModal.shinyInput <- shiny.react::updateReactInput
+
+#' @rdname Snackbar
+#' @inherit shinyInput params return
+#' @note This is an overlay surface wired as a click-reporter: \code{input[[inputId]]}
+#'   holds a click count, and the wrapper does \strong{not} manage the \code{open}
+#'   state. Render it with \code{open = TRUE/FALSE} and toggle visibility from the
+#'   server with \code{updateSnackbar.shinyInput(session, inputId, open = TRUE)}
+#'   (e.g. open it in response to another event, then close it from the Snackbar's
+#'   \code{autoHideDuration}/\code{onClose}).
+#' @export
+Snackbar.shinyInput <- button("Snackbar")
+
+#' @rdname Snackbar
+#' @inherit shinyInput params return
+#' @export
+updateSnackbar.shinyInput <- shiny.react::updateReactInput
 
 #' @rdname StepButton
 #' @inherit shinyInput params return
@@ -88,26 +177,98 @@ updateToggleButton.shinyInput <- shiny.react::updateReactInput
 input <- function(name, defaultValue = NULL, module = "@/muiMaterial") {
   function(inputId, ..., value = defaultValue) {
     checkmate::assert_string(inputId)
-    tag <- shiny.react::reactElement(
-      module = module,
-      name = name,
-      props = shiny.react::asProps(inputId = inputId, ..., value = value),
-      deps = muiMaterialDependency()
-    )
-    class(tag) <- c("muiMaterial", class(tag))
-    tag
+    muiElement(name, module, shiny.react::asProps(inputId = inputId, ..., value = value))
   }
 }
 
 #' @rdname Autocomplete
 #' @inherit shinyInput params return
+#' @examplesIf interactive()
+#' library(shiny)
+#' library(muiMaterial)
+#'
+#' ui <- muiMaterialPage(
+#'   CssBaseline(),
+#'   Autocomplete.shinyInput(
+#'     inputId = "auto",
+#'     options = c("Apple", "Banana", "Cherry"),
+#'     TextField(label = "Fruit")
+#'   ),
+#'   verbatimTextOutput("out")
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   output$out <- renderPrint(input$auto)
+#' }
+#'
+#' shinyApp(ui, server)
 #' @export
-Autocomplete.shinyInput <- input("Autocomplete")
+Autocomplete.shinyInput <- function(inputId, ..., value = NULL) {
+  checkmate::assert_string(inputId)
+  args <- list(...)
+  arg_names <- names(args)
+  if (is.null(arg_names)) {
+    arg_names <- rep("", length(args))
+  }
+  unnamed <- args[arg_names == ""]
+  has_renderInput <- "renderInput" %in% arg_names
+  has_inputProps <- "inputProps" %in% arg_names
+
+  if (
+    has_inputProps && !is.null(args$inputProps) && !is.list(args$inputProps)
+  ) {
+    stop("Autocomplete: `inputProps` must be a list.", call. = FALSE)
+  }
+  if (has_renderInput && length(unnamed) > 0) {
+    warning(
+      "Autocomplete: both `renderInput` and a child element were supplied. ",
+      "`renderInput` takes precedence; the child element is ignored.",
+      call. = FALSE
+    )
+  }
+  if (has_inputProps && length(unnamed) > 0) {
+    warning(
+      "Autocomplete: both `inputProps` and a child element were supplied. ",
+      "The child element takes precedence; `inputProps` is ignored.",
+      call. = FALSE
+    )
+  }
+  if (length(unnamed) > 1) {
+    warning(
+      "Autocomplete: ",
+      length(unnamed),
+      " unnamed arguments were supplied; ",
+      "only the first is used as the input element. Pass extra props via ",
+      "named arguments (e.g. `inputProps = list(...)` or `renderInput = JS(...)`).",
+      call. = FALSE
+    )
+  }
+
+  muiElement(
+    "Autocomplete",
+    "@/muiMaterial",
+    shiny.react::asProps(inputId = inputId, ..., value = value)
+  )
+}
 
 #' @rdname Autocomplete
 #' @inherit shinyInput params return
 #' @export
 updateAutocomplete.shinyInput <- shiny.react::updateReactInput
+
+#' @rdname BottomNavigation
+#' @inherit shinyInput params return
+#' @note Give each child \code{BottomNavigationAction} a \code{value}; the
+#'   selected action's \code{value} is reported to \code{input[[inputId]]}. Pass
+#'   an initial \code{value} matching one of them to pre-select it; when omitted,
+#'   the component mounts with nothing selected (\code{value = FALSE}).
+#' @export
+BottomNavigation.shinyInput <- input("BottomNavigation")
+
+#' @rdname BottomNavigation
+#' @inherit shinyInput params return
+#' @export
+updateBottomNavigation.shinyInput <- shiny.react::updateReactInput
 
 #' @rdname Checkbox
 #' @inherit shinyInput params return
@@ -129,6 +290,16 @@ Input.shinyInput <- input("Input")
 #' @export
 updateInput.shinyInput <- shiny.react::updateReactInput
 
+#' @rdname FilledInput
+#' @inherit shinyInput params return
+#' @export
+FilledInput.shinyInput <- input("FilledInput")
+
+#' @rdname FilledInput
+#' @inherit shinyInput params return
+#' @export
+updateFilledInput.shinyInput <- shiny.react::updateReactInput
+
 #' @rdname FormControlLabel
 #' @inherit shinyInput params return
 #' @export
@@ -149,8 +320,23 @@ OutlinedInput.shinyInput <- input("OutlinedInput")
 #' @export
 updateOutlinedInput.shinyInput <- shiny.react::updateReactInput
 
+#' @rdname Pagination
+#' @inherit shinyInput params return
+#' @export
+Pagination.shinyInput <- input("Pagination", defaultValue = 1)
+
+#' @rdname Pagination
+#' @inherit shinyInput params return
+#' @export
+updatePagination.shinyInput <- shiny.react::updateReactInput
+
 #' @rdname Radio
 #' @inherit shinyInput params return
+#' @note A standalone \code{Radio.shinyInput} reports a boolean (\code{checked}) to
+#'   the server, not the selected option string. For mutually-exclusive option groups
+#'   use \code{\link{RadioGroup.shinyInput}} instead, which reports the string
+#'   \code{value} of the selected radio.
+#' @seealso \code{\link{RadioGroup.shinyInput}}
 #' @export
 Radio.shinyInput <- input("Radio")
 
@@ -189,8 +375,32 @@ Select.shinyInput <- input("Select")
 #' @export
 updateSelect.shinyInput <- shiny.react::updateReactInput
 
+#' @rdname NativeSelect
+#' @inherit shinyInput params return
+#' @export
+NativeSelect.shinyInput <- input("NativeSelect")
+
+#' @rdname NativeSelect
+#' @inherit shinyInput params return
+#' @export
+updateNativeSelect.shinyInput <- shiny.react::updateReactInput
+
 #' @rdname Slider
 #' @inherit shinyInput params return
+#' @examplesIf interactive()
+#' library(shiny)
+#' library(muiMaterial)
+#'
+#' ui <- muiMaterialPage(
+#'   Slider.shinyInput("s", value = 30, min = 0, max = 100),
+#'   verbatimTextOutput("out")
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   output$out <- renderPrint(input$s)
+#' }
+#'
+#' shinyApp(ui, server)
 #' @export
 Slider.shinyInput <- input("Slider")
 
@@ -211,6 +421,10 @@ updateSwitch.shinyInput <- shiny.react::updateReactInput
 
 #' @rdname Tabs
 #' @inherit shinyInput params return
+#' @note Pass an initial \code{value} matching one of the child \code{Tab} values
+#'   to pre-select that tab. When omitted, the component mounts with no tab selected
+#'   (\code{value = FALSE}) rather than uncontrolled, so a later server-driven update
+#'   does not trigger MUI's controlled/uncontrolled warning.
 #' @export
 Tabs.shinyInput <- input("Tabs")
 
@@ -219,18 +433,15 @@ Tabs.shinyInput <- input("Tabs")
 #' @export
 updateTabs.shinyInput <- shiny.react::updateReactInput
 
-#' @rdname Tab
-#' @inherit shinyInput params return
-#' @export
-Tab.shinyInput <- input("Tab")
-
-#' @rdname Tab
-#' @inherit shinyInput params return
-#' @export
-updateTab.shinyInput <- shiny.react::updateReactInput
-
 #' @rdname TabContext
 #' @inherit shinyInput params return
+#' @note Pass an initial \code{value} matching one of the \code{TabPanel} values
+#'   to pre-select that panel; when omitted, the component mounts with no panel
+#'   selected (\code{value = ""}) rather than uncontrolled, so a later
+#'   server-driven update does not trigger MUI's controlled/uncontrolled warning.
+#'   \code{TabContext} itself has no change event, so \code{input[[inputId]]}
+#'   reports only this initial value. To react to tab clicks on the server, read
+#'   \code{input[[inputId]]} from the \code{\link{TabList.shinyInput}} instead.
 #' @export
 TabContext.shinyInput <- input("TabContext")
 
@@ -251,6 +462,12 @@ updateTabList.shinyInput <- shiny.react::updateReactInput
 
 #' @rdname TabPanel
 #' @inherit shinyInput params return
+#' @note \code{TabPanel} is a display-only component: it shows or hides its
+#'   content based on the active tab value held by the surrounding
+#'   \code{TabContext}, but never fires \code{onChange} from user interaction.
+#'   As a result \code{input$<inputId>} will always remain \code{NULL}. To
+#'   react to tab changes on the server, read \code{input$<inputId>} from the
+#'   \code{TabList.shinyInput} instead.
 #' @export
 TabPanel.shinyInput <- input("TabPanel")
 
@@ -261,6 +478,20 @@ updateTabPanel.shinyInput <- shiny.react::updateReactInput
 
 #' @rdname TextField
 #' @inherit shinyInput params return
+#' @examplesIf interactive()
+#' library(shiny)
+#' library(muiMaterial)
+#'
+#' ui <- muiMaterialPage(
+#'   TextField.shinyInput("txt", label = "Your name", value = ""),
+#'   verbatimTextOutput("out")
+#' )
+#'
+#' server <- function(input, output, session) {
+#'   output$out <- renderPrint(input$txt)
+#' }
+#'
+#' shinyApp(ui, server)
 #' @export
 TextField.shinyInput <- input("TextField")
 

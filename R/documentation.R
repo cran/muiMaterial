@@ -159,6 +159,18 @@ NULL
 #'
 #' @description \url{https://mui.com/material-ui/api/autocomplete/}
 #'
+#' MUI's \code{Autocomplete} requires a \code{renderInput} function prop, which
+#' R cannot express directly. The R wrapper resolves the input in this order:
+#' \enumerate{
+#'   \item \code{renderInput} — pass an explicit \code{JS()} callback for full control.
+#'   \item A child element (e.g. \code{TextField(...)}, \code{OutlinedInput(...)})
+#'     — it is cloned and receives the \code{params} from MUI automatically.
+#'     This is the recommended path: it stays close to the MUI API and survives
+#'     upstream changes without touching R user code.
+#'   \item \code{inputProps} — a named list of props forwarded to a default
+#'     \code{TextField}. Kept for backward compatibility with older examples.
+#' }
+#'
 #' @param ... Props to pass to the component.
 #' @return Object with \code{shiny.tag} class suitable for use in the UI of a Shiny app.
 #'
@@ -1247,39 +1259,6 @@ NULL
 #' @name Grid
 NULL
 
-#' GridLegacy
-#'
-#' @description \url{https://mui.com/material-ui/api/grid-legacy/}
-#'
-#' @param ... Props to pass to the component.
-#' @return Object with \code{shiny.tag} class suitable for use in the UI of a Shiny app.
-#'
-#' @details
-#' \itemize{
-#' \item children `node` \cr Default is - The content of the component.
-#' \item classes `object` \cr Default is - Override or extend the styles applied to the component.See CSS classes API below for more details.
-#' \item columns `Array number | number| object` \cr Default is 12 The number of columns.
-#' \item columnSpacing `Array number| string | number| object| string` \cr Default is - Defines the horizontal space between the type item components. It overrides the value of the spacing prop.
-#' \item component `elementType` \cr Default is - The component used for the root node. Either a string to use a HTML element or a component.
-#' \item container `bool` \cr Default is FALSE If true, the component will have the flex container behavior. You should be wrapping items with a container.
-#' \item direction `'column-reverse'| 'column'| 'row-reverse'| 'row'| Array 'column-reverse'| 'column'| 'row-reverse'| 'row' | object` \cr Default is 'row' Defines the flex-direction style property. It is applied for all screen sizes.
-#' \item item `bool` \cr Default is FALSE If true, the component will have the flex item behavior. You should be wrapping items with a container.
-#' \item lg `'auto'| number| bool` \cr Default is FALSE If a number, it sets the number of columns the grid item uses. It can't be greater than the total number of columns of the container (12 by default). If 'auto', the grid item's width matches its content. If false, the prop is ignored. If true, the grid item's width grows to use the space available in the grid container. The value is applied for the lg breakpoint and wider screens if not overridden.
-#' \item md `'auto'| number| bool` \cr Default is FALSE If a number, it sets the number of columns the grid item uses. It can't be greater than the total number of columns of the container (12 by default). If 'auto', the grid item's width matches its content. If false, the prop is ignored. If true, the grid item's width grows to use the space available in the grid container. The value is applied for the md breakpoint and wider screens if not overridden.
-#' \item rowSpacing `Array number| string | number| object| string` \cr Default is - Defines the vertical space between the type item components. It overrides the value of the spacing prop.
-#' \item sm `'auto'| number| bool` \cr Default is FALSE If a number, it sets the number of columns the grid item uses. It can't be greater than the total number of columns of the container (12 by default). If 'auto', the grid item's width matches its content. If false, the prop is ignored. If true, the grid item's width grows to use the space available in the grid container. The value is applied for the sm breakpoint and wider screens if not overridden.
-#' \item spacing `Array number| string | number| object| string` \cr Default is 0 Defines the space between the type item components. It can only be used on a type container component.
-#' \item sx `Array func| object| bool | func| object` \cr Default is - The system prop that allows defining system overrides as well as additional CSS styles.See the `sx` page for more details.
-#' \item wrap `'nowrap'| 'wrap-reverse'| 'wrap'` \cr Default is 'wrap' Defines the flex-wrap style property. It's applied for all screen sizes.
-#' \item xl `'auto'| number| bool` \cr Default is FALSE If a number, it sets the number of columns the grid item uses. It can't be greater than the total number of columns of the container (12 by default). If 'auto', the grid item's width matches its content. If false, the prop is ignored. If true, the grid item's width grows to use the space available in the grid container. The value is applied for the xl breakpoint and wider screens if not overridden.
-#' \item xs `'auto'| number| bool` \cr Default is FALSE If a number, it sets the number of columns the grid item uses. It can't be greater than the total number of columns of the container (12 by default). If 'auto', the grid item's width matches its content. If false, the prop is ignored. If true, the grid item's width grows to use the space available in the grid container. The value is applied for all the screen sizes with the lowest priority.
-#' \item zeroMinWidth `bool` \cr Default is FALSE If true, it sets min-width: 0 on the item. Refer to the limitations section of the documentation to better understand the use case.
-#' }
-#'
-#' @md
-#' @name GridLegacy
-NULL
-
 #' Grow
 #'
 #' @description \url{https://mui.com/material-ui/api/grow/}
@@ -2127,71 +2106,6 @@ NULL
 #'
 #' @md
 #' @name Paper
-NULL
-
-#' PigmentContainer
-#'
-#' @description \url{https://mui.com/material-ui/api/pigment-container/}
-#'
-#' @param ... Props to pass to the component.
-#' @return Object with \code{shiny.tag} class suitable for use in the UI of a Shiny app.
-#'
-#' @details
-#' \itemize{
-#' \item classes `object` \cr Default is - Override or extend the styles applied to the component.See CSS classes API below for more details.
-#' \item disableGutters `bool` \cr Default is FALSE If true, the left and right padding is removed.
-#' \item fixed `bool` \cr Default is FALSE Set the max-width to match the min-width of the current breakpoint. This is useful if you'd prefer to design for a fixed set of sizes instead of trying to accommodate a fully fluid viewport. It's fluid by default.
-#' \item maxWidth `'lg'| 'md'| 'sm'| 'xl'| 'xs'| false` \cr Default is 'lg' Determine the max-width of the container. The container width grows with the size of the screen. Set to false to disable maxWidth.
-#' \item sx `Array func| object| bool | func| object` \cr Default is - The system prop that allows defining system overrides as well as additional CSS styles.See the `sx` page for more details.
-#' }
-#'
-#' @md
-#' @name PigmentContainer
-NULL
-
-#' PigmentGrid
-#'
-#' @description \url{https://mui.com/material-ui/api/pigment-grid/}
-#'
-#' @param ... Props to pass to the component.
-#' @return Object with \code{shiny.tag} class suitable for use in the UI of a Shiny app.
-#'
-#' @details
-#' \itemize{
-#' \item children `node` \cr Default is - The content of the component.
-#' \item columns `Array number | number| object` \cr Default is 12 The number of columns.
-#' \item columnSpacing `Array number| string | number| object| string` \cr Default is - Defines the horizontal space between the type item components. It overrides the value of the spacing prop.
-#' \item container `bool` \cr Default is FALSE If true, the component will have the flex container behavior. You should be wrapping items with a container.
-#' \item direction `'column'| 'column-reverse'| 'row'| 'row-reverse'| Array 'column'| 'column-reverse'| 'row'| 'row-reverse' | object` \cr Default is 'row' Defines the flex-direction style property. It is applied for all screen sizes.
-#' \item offset `Array number | number| object` \cr Default is - Defines the offset of the grid.
-#' \item rowSpacing `Array number| string | number| object| string` \cr Default is - Defines the vertical space between the type item components. It overrides the value of the spacing prop.
-#' \item size `Array number | number| object` \cr Default is - Defines the column size of the grid.
-#' \item spacing `Array number| string | number| object| string` \cr Default is 0 Defines the space between the type item components. It can only be used on a type container component.
-#' \item wrap `'nowrap'| 'wrap-reverse'| 'wrap'` \cr Default is 'wrap' Defines the flex-wrap style property. It's applied for all screen sizes.
-#' }
-#'
-#' @md
-#' @name PigmentGrid
-NULL
-
-#' PigmentStack
-#'
-#' @description \url{https://mui.com/material-ui/api/pigment-stack/}
-#'
-#' @param ... Props to pass to the component.
-#' @return Object with \code{shiny.tag} class suitable for use in the UI of a Shiny app.
-#'
-#' @details
-#' \itemize{
-#' \item children `node` \cr Default is - The content of the component.
-#' \item direction `'column-reverse'| 'column'| 'row-reverse'| 'row'| Array 'column-reverse'| 'column'| 'row-reverse'| 'row' | { lg?: 'column-reverse'| 'column'| 'row-reverse'| 'row', md?: 'column-reverse'| 'column'| 'row-reverse'| 'row', sm?: 'column-reverse'| 'column'| 'row-reverse'| 'row', xl?: 'column-reverse'| 'column'| 'row-reverse'| 'row', xs?: 'column-reverse'| 'column'| 'row-reverse'| 'row' }` \cr Default is 'column' Defines the flex-direction style property. It is applied for all screen sizes.
-#' \item divider `node` \cr Default is - Add an element between each child.
-#' \item spacing `Array number| string | number| { lg?: number| string, md?: number| string, sm?: number| string, xl?: number| string, xs?: number| string }| string` \cr Default is 0 Defines the space between immediate children.
-#' \item sx `Array func| object| bool | func| object` \cr Default is - The system prop, which allows defining system overrides as well as additional CSS styles.See the `sx` page for more details.
-#' }
-#'
-#' @md
-#' @name PigmentStack
 NULL
 
 #' Popover
