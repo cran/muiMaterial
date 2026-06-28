@@ -1,7 +1,7 @@
 Package: muiMaterial
 Type: Package
 Title: 'Material UI' for 'shiny' Apps and 'Quarto'
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: 
   c(person(given = "Felix",
            family = "Luginbuhl",
@@ -40,7 +40,7 @@ Collate: 'aaa-utils.R' 'ThemeProvider.R' 'browse.R'
         'muiMaterialDependency.R' 'muiMaterialExample.R'
         'muiMaterialPage.R' 'reexports.R' 'static-tabs.R' 'triggerId.R'
 NeedsCompilation: no
-Packaged: 2026-06-04 15:05:54 UTC; felix
+Packaged: 2026-06-28 15:13:22 UTC; felix
 Author: Felix Luginbuhl [aut, cre, cph] (ORCID:
     <https://orcid.org/0009-0008-6625-2899>),
   MUI [cph] (Copyright holder of the bundled '@mui/material', '@mui/lab',
@@ -52,4 +52,4 @@ Author: Felix Luginbuhl [aut, cre, cph] (ORCID:
     declared as peer dependencies and provided at runtime by
     'shiny.react')
 Repository: CRAN
-Date/Publication: 2026-06-04 15:20:01 UTC
+Date/Publication: 2026-06-28 17:00:02 UTC

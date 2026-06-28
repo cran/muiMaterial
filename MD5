@@ -1,8 +1,8 @@
-a77a3349c3810b5b993c287a7798e576 *DESCRIPTION
+e3672097d892d614067e451cdc09a208 *DESCRIPTION
 15e1fc579eafc3ef05883158f1fb5ade *LICENSE
 8aad2892773245e17fe52284605bb459 *LICENSE.note
 d4db52e8c881f4554885b0079dd04a42 *NAMESPACE
-f31a9b13200e99b1feb2f87bc56ab00f *NEWS.md
+5cc6d15fe592024c206038c52dac2beb *NEWS.md
 cbd3a49d3577ff834f265f833371143b *R/ThemeProvider.R
 392c25998f5b48909caf1eb5297e5b73 *R/aaa-utils.R
 dae3d6a6303ec2a2b5fc99e8d15eb6e5 *R/browse.R
@@ -18,7 +18,7 @@ e46a0abaaeb21322f03ae3bb257d4f41 *R/muiMaterialExample.R
 9eeb58d611e19b358a3da7b6807136a0 *R/reexports.R
 499b3f8e95b78483a8f08ef0d4ba4e0b *R/static-tabs.R
 7da0968b9da1dd2a20f5959acd64ff4f *R/triggerId.R
-c23db68c91627279be842753a0e9bd61 *README.md
+3e156979c1f42847ab07d7e6d2e1e8b7 *README.md
 3235f40ff5d49b4ba9f4e2e4effe7efa *inst/examples/Autocomplete.R
 71ab44207206ede51b41b1e056d62ff7 *inst/examples/BottomNavigation.R
 4d2779a58ce2787cea0f4486cc5dbe30 *inst/examples/Button.R
@@ -77,8 +77,8 @@ d46a0f47460ebbaea279f40f48e615d5 *inst/examples/mui-template-dashboard/modules/m
 c67582752f220b04fbe60a55b1af786e *inst/examples/mui-template-dashboard/modules/themePrimitives.R
 49cf68107827b413dc832cdd2aed6085 *inst/examples/muiMaterialPage.R
 8721af4d427f80db1343f3562280300f *inst/examples/showcase/app.R
-f00826e8eea61e405fa73d5caef3fe52 *inst/www/muiMaterial/mui-material.js
-1c9c8276a7e295b27ad4b0ee92e545c5 *inst/www/muiMaterial/mui-material.js.LICENSE.txt
+81bd23148f762992dc729d8de7b43ea5 *inst/www/muiMaterial/mui-material.js
+02206838309e41452c460dc62dce4481 *inst/www/muiMaterial/mui-material.js.LICENSE.txt
 2b1c961193d2e136b16f5015a9ed22cf *man/Accordion.Rd
 8613ae77c44cd08661c0574a1891c6d3 *man/AccordionActions.Rd
 d4d55d2aeacb418c1e984cdc4925e024 *man/AccordionDetails.Rd
